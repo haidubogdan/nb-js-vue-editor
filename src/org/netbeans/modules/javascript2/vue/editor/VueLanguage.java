@@ -29,8 +29,11 @@ import org.netbeans.modules.javascript2.vue.editor.lexer.VueTokenId.VueLanguageH
 import org.netbeans.spi.lexer.Lexer;
 import org.netbeans.spi.lexer.LexerRestartInfo;
 import org.openide.filesystems.MIMEResolver;
-import org.openide.util.*;
+import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+
+
 
 /**
  *
