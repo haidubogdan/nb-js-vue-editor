@@ -20,7 +20,7 @@ package org.netbeans.modules.javascript2.vue.editor.lexer;
 
 import org.netbeans.api.lexer.Token;
 import static org.netbeans.modules.javascript2.vue.editor.lexer.VueTokenId.*;
-import org.netbeans.modules.javascript2.vue.syntax.antlr4.coloring.VueAntlrColoringLexer;
+import org.netbeans.modules.javascript2.vue.grammar.antlr4.coloring.VueAntlrColoringLexer;
 import org.netbeans.spi.lexer.LexerRestartInfo;
 import org.netbeans.spi.lexer.antlr4.AbstractAntlrLexerBridge;
 
@@ -29,8 +29,6 @@ import org.netbeans.spi.lexer.antlr4.AbstractAntlrLexerBridge;
  * @author bogdan.haidu
  */
 public class VueLexer extends AbstractAntlrLexerBridge<VueAntlrColoringLexer, VueTokenId> {
-
-    public static final String MIME_TYPE = "text/x-vue"; //NOI18N
 
     public VueLexer(LexerRestartInfo<VueTokenId> info) {
         super(info, VueAntlrColoringLexer::new);
@@ -49,10 +47,16 @@ public class VueLexer extends AbstractAntlrLexerBridge<VueAntlrColoringLexer, Vu
                 return groupToken(HTML, VueAntlrColoringLexer.HTML);
             case VueAntlrColoringLexer.JAVASCRIPT_ATTR:
                 return groupToken(JAVASCRIPT_ATTR, VueAntlrColoringLexer.JAVASCRIPT_ATTR);
-            case VueAntlrColoringLexer.LISTENER_ATTR:
-                return token(LISTENER_ATTR);
+            case VueAntlrColoringLexer.VUE_DIRECTIVE:
+                return token(VUE_DIRECTIVE);
             case VueAntlrColoringLexer.QUOTE_ATTR:
                 return token(QUOTE_ATTR);
+            case VueAntlrColoringLexer.VAR_TAG:
+                return token(VAR_TAG);
+            case VueAntlrColoringLexer.JAVASCRIPT:
+                return groupToken(JAVASCRIPT, VueAntlrColoringLexer.JAVASCRIPT);
+            case VueAntlrColoringLexer.CSS:
+                return groupToken(CSS, VueAntlrColoringLexer.CSS);
             default:
                 return groupToken(HTML, VueAntlrColoringLexer.HTML);
         }
@@ -61,19 +65,25 @@ public class VueLexer extends AbstractAntlrLexerBridge<VueAntlrColoringLexer, Vu
     private static class State extends AbstractAntlrLexerBridge.LexerState<VueAntlrColoringLexer> {
 
         final boolean insideTemplateTag;
+        final boolean insideStyleTag;
         final boolean attrQuoteOpened;
+        final boolean varInterpolationOpened;
 
         public State(VueAntlrColoringLexer lexer) {
             super(lexer);
             this.insideTemplateTag = lexer.isInsideTemplateTag();
+            this.insideStyleTag = lexer.isInsideStyleTag();
             this.attrQuoteOpened = lexer.getAttrQuoteState();
+            this.varInterpolationOpened = lexer.isVarInterpolationOpened();
         }
 
         @Override
         public void restore(VueAntlrColoringLexer lexer) {
             super.restore(lexer);
             lexer.setInsideTemplateTag(insideTemplateTag);
+            lexer.setInsideStyleTag(insideStyleTag);
             lexer.setAttrQuoteState(attrQuoteOpened);
+            lexer.setVarInterpolationOpened(varInterpolationOpened);
         }
     }
 

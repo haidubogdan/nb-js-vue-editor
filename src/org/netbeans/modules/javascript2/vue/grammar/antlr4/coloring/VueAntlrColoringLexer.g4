@@ -37,7 +37,7 @@ lexer grammar VueAntlrColoringLexer;
  * specific language governing permissions and limitations
  * under the License.
  */
-  package org.netbeans.modules.javascript2.vue.syntax.antlr4.coloring;
+  package org.netbeans.modules.javascript2.vue.grammar.antlr4.coloring;
 }
 
 options { 
@@ -46,31 +46,55 @@ options {
 
 tokens {
  TEMPLATE_TAG_OPEN,
- LISTENER_ATTR,
+ VUE_DIRECTIVE,
  QUOTE_ATTR,
  JAVASCRIPT,
  JAVASCRIPT_ATTR,   
- HTML
+ HTML,
+ CSS
 }
     
 fragment Identifier 
-    : [a-z_\u0080-\ufffe][a-z0-9_\u0080-\ufffe]*;   
+    : [a-z_\u0080-\ufffe][a-z0-9_\u0080-\ufffe]*;
 
-TEMPLATE_TAG_OPEN : '<template' (' ')* '>' {this.setInsideTemplateTag(true);} ->pushMode(INSIDE_TEMPLATE);
- 
+fragment ArgumentExtra
+    : (Identifier ('.' Identifier)*) 
+      | ('[' Identifier ']');
+
+TEMPLATE_TAG_OPEN : '<template' {this.setInsideTemplateTag(true);} ->pushMode(INSIDE_TEMPLATE);
+
+STYLE_TAG_OPEN : '<style' (' ')* '>' {this.setInsideStyleTag(true);} ->type(HTML),pushMode(INSIDE_STYLE);
+
 OTHER : . ->type(HTML);   
     
 mode INSIDE_TEMPLATE;
 
 TEMPLATE_TAG_CLOSE : '</template>'->popMode;
-LISTENER_ATTR_TEMPLATE : '@' Identifier {this._input.LA(1) == '='}? ->type(LISTENER_ATTR),pushMode(INSIDE_SCRIPT_ATTR);
+VUE_DIRECTIVE_TEMPLATE : ('v-' Identifier (':' ArgumentExtra)? | '@' ArgumentExtra | ':' (Identifier | ('[' Identifier ']') )) {this._input.LA(1) == '='}? ->type(VUE_DIRECTIVE),pushMode(INSIDE_SCRIPT_ATTR);
+VUE_DIRECTIVE_SIMPLE : 'v-' ( 'once' | 'else' | 'pre' | 'cloak' | 'slot:' Identifier  ) ->type(VUE_DIRECTIVE);
+
+VAR_TAG : '{{' {this.setVarInterpolationOpened(true);} ->pushMode(INSIDE_VAR_INTERPOLATION);
 TEMPLATE_OTHER : . ->type(HTML); 
 EXIT_TEMPLATE_EOF : EOF->type(HTML),popMode;
 
 mode INSIDE_SCRIPT_ATTR;
 
-SCRIPT_ATTR_QUOTE_EXIT : {this.getAttrQuoteState() == true}? '"' {this.setAttrQuoteState(false);}->type(QUOTE_ATTR);
+SCRIPT_ATTR_QUOTE_EXIT : {this.getAttrQuoteState() == true}? '"' {this.setAttrQuoteState(false);}->type(QUOTE_ATTR), popMode;
 SCRIPT_ATTR_QUOTE : '"' {this.setAttrQuoteState(true);}->type(QUOTE_ATTR);
 
 SCRIPT_ATTR_OTHER : . ->type(JAVASCRIPT_ATTR); 
 EXIT_SCRIPT_ATTR_EOF : EOF->type(HTML),popMode;
+
+mode INSIDE_STYLE;
+    
+STYLE_TAG_CLOSE : '</style>'->type(HTML),popMode;
+STYLE_OTHER : . ->type(CSS); 
+EXIT_STYLE_EOF : EOF->type(HTML),popMode;
+
+mode INSIDE_VAR_INTERPOLATION;
+
+VAR_INTERPOLATION_END : {this.isVarInterpolationOpened()}? '}}' {this.setVarInterpolationOpened(false);}->type(VAR_TAG), popMode; 
+VAR_INTERPOLATION_OTHER : . ->type(JAVASCRIPT); 
+EXIT_VAR_INTERPOLATION_EOF : EOF->type(HTML),popMode;
+
+    

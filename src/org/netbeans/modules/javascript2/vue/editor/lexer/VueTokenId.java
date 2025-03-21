@@ -25,6 +25,7 @@ import org.netbeans.api.lexer.InputAttributes;
 import org.netbeans.api.lexer.LanguagePath;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.api.lexer.TokenId;
+import org.netbeans.modules.css.lib.api.CssTokenId;
 import org.netbeans.modules.javascript2.lexer.api.JsTokenId;
 import org.netbeans.spi.lexer.LanguageEmbedding;
 import org.netbeans.spi.lexer.LanguageHierarchy;
@@ -35,9 +36,12 @@ import org.netbeans.spi.lexer.LanguageHierarchy;
  */
 public enum VueTokenId implements TokenId {
     HTML("html"), // NOI18N
+    CSS("css"), // NOI18N
     JAVASCRIPT_ATTR("javascript"), // NOI18N
-    QUOTE_ATTR("string"), // NOI18N
-    LISTENER_ATTR("listener_attr"), // NOI18N
+    JAVASCRIPT("javascript"), // NOI18N
+    QUOTE_ATTR("attr_quote"), // NOI18N
+    VUE_DIRECTIVE("vue_directive"), // NOI18N
+    VAR_TAG("var_tag"), // NOI18N
     ;
     private final String primaryCategory;
 
@@ -62,11 +66,15 @@ public enum VueTokenId implements TokenId {
                 LanguagePath languagePath, InputAttributes inputAttributes) {
 
             switch (token.id()) {
-                case JAVASCRIPT_ATTR:
+                case JAVASCRIPT:
+                case JAVASCRIPT_ATTR: {
                     return LanguageEmbedding.create(JsTokenId.javascriptLanguage(), 0, 0, true);
-                case HTML:
-                case LISTENER_ATTR:{
+                }
+                case HTML:{
                     return LanguageEmbedding.create(HTMLTokenId.language(), 0, 0, true);
+                }
+                case CSS:{
+                    return LanguageEmbedding.create(CssTokenId.language(), 0, 0, true);
                 }
                 default: {
                     return null;

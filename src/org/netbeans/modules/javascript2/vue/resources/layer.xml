@@ -6,9 +6,19 @@
             <folder name="x-vue">
                 <attr name="displayName" stringvalue="Vue"/>
                 <folder name="FontsColors">
+                    <folder name="FlatLafDark">
+                        <folder name="NetBeans">
+                            <folder name="Defaults">
+                                <file name="FontAndColors.xml">
+                                   <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.modules.javascript2.vue.resources.Bundle"/>
+                                </file>
+                            </folder>
+                        </folder>
+                    </folder>
                     <folder name="NetBeans">
                         <folder name="Defaults">
                             <file name="FontAndColors.xml" url="FontAndColors.xml">
+                                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.modules.javascript2.vue.resources.Bundle"/>
                             </file>
                         </folder>
                     </folder>

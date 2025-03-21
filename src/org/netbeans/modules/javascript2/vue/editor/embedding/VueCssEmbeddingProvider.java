@@ -19,6 +19,7 @@
 package org.netbeans.modules.javascript2.vue.editor.embedding;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.netbeans.api.lexer.Token;
@@ -30,6 +31,8 @@ import org.netbeans.modules.javascript2.vue.editor.lexer.VueTokenId;
 import org.netbeans.modules.parsing.api.Embedding;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.EmbeddingProvider;
+import org.netbeans.modules.parsing.spi.SchedulerTask;
+import org.netbeans.modules.parsing.spi.TaskFactory;
 
 /**
  * this will enable braces matches of html elements
@@ -38,60 +41,45 @@ import org.netbeans.modules.parsing.spi.EmbeddingProvider;
  */
 @EmbeddingProvider.Registration(
         mimeType = VueLanguage.MIME_TYPE,
-        targetMimeType = "text/html")
-public class VueHtmlEmbeddingProvider extends EmbeddingProvider {
-    public static final String FILLER = " "; //NOI18N
-    public static final String TARGET_MIME_TYPE = "text/html"; //NOI18N
+        targetMimeType = "text/css")
+public class VueCssEmbeddingProvider extends EmbeddingProvider {
+    public static final String TARGET_MIME_TYPE = "text/css"; //NOI18N
 
     @Override
-    public List<Embedding> getEmbeddings(final Snapshot snapshot) {
+    public List<Embedding> getEmbeddings(Snapshot snapshot) {
         TokenHierarchy<?> tokenHierarchy = snapshot.getTokenHierarchy();
-        TokenSequence<?> sequence = tokenHierarchy.tokenSequence();
+        TokenSequence<?> ts = tokenHierarchy.tokenSequence();
         
-        if (sequence == null || !sequence.isValid()) {
+        if (ts == null || !ts.isValid()) {
             return Collections.emptyList();
         }
-        sequence.moveStart();
+        
+        ts.moveStart();
+        
         List<Embedding> embeddings = new ArrayList<>();
-
-        int offset = 0;
-        int len = 0;
-
-        String fake;
-
-        try {
-            while (sequence.moveNext()) {
-                Token<?> t = sequence.token();
-                offset = sequence.offset();
-                TokenId id = t.id();
-                len += t.length();
-                String tText = t.text().toString();
-                if (len == 0) {
-                    continue;
-                }
-                if (id.equals(VueTokenId.HTML)) {
-                    embeddings.add(snapshot.create(offset, t.length(), TARGET_MIME_TYPE));
-                } else {
-                    fake = new String(new char[tText.length()]).replace("\0", FILLER); //NOI18N
-                    embeddings.add(snapshot.create(fake, TARGET_MIME_TYPE));
-                }
+        
+        while (ts.moveNext()) {
+            Token<?> token = ts.token();
+            TokenId id = token.id();
+            if (id.equals(VueTokenId.CSS)) {
+                embeddings.add(snapshot.create(ts.offset(), token.length(), TARGET_MIME_TYPE));
             }
-        } catch (Exception ex) {
+        }
+
+        if (embeddings.isEmpty()) {
             return Collections.emptyList();
         }
+        return Collections.singletonList(Embedding.create(embeddings));
         
-        if (embeddings.isEmpty()) {
-            return Collections.singletonList(snapshot.create("", TARGET_MIME_TYPE)); //NOI18N
-        } else {
-            return Collections.singletonList(Embedding.create(embeddings));
-        }
     }
 
     @Override
     public int getPriority() {
-        return 210;
+        return 220;
     }
 
     @Override
-    public void cancel() { }
+    public void cancel() {
+        // nothing so far
+    }
 }

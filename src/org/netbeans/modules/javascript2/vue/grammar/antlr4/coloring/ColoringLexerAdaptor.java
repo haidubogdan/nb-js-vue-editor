@@ -1,7 +1,7 @@
 /*
 Licensed to the Apache Software Foundation (ASF)
  */
-package org.netbeans.modules.javascript2.vue.syntax.antlr4.coloring;
+package org.netbeans.modules.javascript2.vue.grammar.antlr4.coloring;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
@@ -13,7 +13,9 @@ import org.antlr.v4.runtime.Lexer;
 public abstract class ColoringLexerAdaptor extends Lexer {
 
     private boolean insideTemplateTag = false;
+    private boolean insideStyleTag = false;
     private boolean attrQuoteOpened = false;
+    private boolean varInterpolationOpened = false;
 
     public ColoringLexerAdaptor(CharStream input) {
         super(input);
@@ -33,11 +35,27 @@ public abstract class ColoringLexerAdaptor extends Lexer {
         return insideTemplateTag;
     }
     
+    public void setInsideStyleTag(boolean state) {
+        insideStyleTag = state;
+    }
+
+    public boolean isInsideStyleTag() {
+        return insideStyleTag;
+    }
+    
     public void setAttrQuoteState(boolean state) {
         attrQuoteOpened = state;
     }
 
     public boolean getAttrQuoteState() {
         return attrQuoteOpened;
+    }
+        
+    public void setVarInterpolationOpened(boolean state) {
+        varInterpolationOpened = state;
+    }
+
+    public boolean isVarInterpolationOpened() {
+        return varInterpolationOpened;
     }
 }
