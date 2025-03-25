@@ -5,8 +5,7 @@ name: netbeans-nbm-release
 
 on:
   workflow_dispatch:
-permissions:
-  contents: read|write
+
 jobs:
   build:
     strategy:
