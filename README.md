@@ -38,3 +38,7 @@ For more information refer yourself to: http://platform.netbeans.org/tutorials/n
 ### Features
 
 - Vue syntax coloring
+
+![image](https://github.com/user-attachments/assets/e922ec2a-1c61-4b0e-b9e7-57ca8173bc87)
+
+
