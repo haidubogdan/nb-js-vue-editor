@@ -32,6 +32,7 @@ jobs:
           tag_name:  ${{ inputs.tag-version }}
           body_path: .github/workflows/CHANGELOG_RELEASE.md
   build:
+    needs: create_release 
     strategy:
       matrix:
         label: [18, 19, 20, 21, 22, 23, 24, 25]
