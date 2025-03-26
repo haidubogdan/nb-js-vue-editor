@@ -41,7 +41,7 @@ jobs:
     - name : prepare the files from project  
       run : cp ./manifest.mf nb-plugin-package/src/main/nbm/manifest.mf
     - name : prepare the files from project  
-      run : cp ./.github/pom.xml nb-plugin-package/pom.xml
+      run : cp ./.github/deploy/pom.xml nb-plugin-package/pom.xml
     - name : prepare the files from project  
       run : cp ./nbproject/project.properties nb-plugin-package/project.properties
     - name : prepare the files from project  
