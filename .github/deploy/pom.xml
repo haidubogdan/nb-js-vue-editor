@@ -11,13 +11,12 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <nbversion>RELEASE180</nbversion>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
     <!--keep until maven changes it-->
-    <version>25.1.0.1</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
     <licenses>
