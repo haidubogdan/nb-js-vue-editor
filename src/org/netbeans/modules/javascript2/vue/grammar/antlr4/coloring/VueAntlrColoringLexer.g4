@@ -63,7 +63,7 @@ fragment ArgumentExtra
 
 TEMPLATE_TAG_OPEN : '<template' {this.setInsideTemplateTag(true);} ->pushMode(INSIDE_TEMPLATE);
 
-STYLE_TAG_OPEN : '<style' (' ')* '>' {this.setInsideStyleTag(true);} ->type(HTML),pushMode(INSIDE_STYLE);
+STYLE_TAG_OPEN : '<style' (' ')* 'scoped'? '>' {this.setInsideStyleTag(true);} ->type(HTML),pushMode(INSIDE_STYLE);
 
 OTHER : . ->type(HTML);   
     

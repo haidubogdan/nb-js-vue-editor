@@ -3,5 +3,5 @@ AutoUpdate-Show-In-Client: true
 OpenIDE-Module: org.netbeans.modules.javascript2.vue
 OpenIDE-Module-Layer: org/netbeans/modules/javascript2/vue/resources/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/netbeans/modules/javascript2/vue/resources/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Specification-Version: 1.0.1
 
