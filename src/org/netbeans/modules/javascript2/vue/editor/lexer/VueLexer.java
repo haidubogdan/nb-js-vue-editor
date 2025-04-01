@@ -42,6 +42,7 @@ public class VueLexer extends AbstractAntlrLexerBridge<VueAntlrColoringLexer, Vu
     @Override
     protected Token<VueTokenId> mapToken(org.antlr.v4.runtime.Token antlrToken) {
 
+        Object test = this.state();
         switch (antlrToken.getType()) {
             case VueAntlrColoringLexer.HTML:
                 return groupToken(HTML, VueAntlrColoringLexer.HTML);

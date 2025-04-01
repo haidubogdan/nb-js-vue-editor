@@ -16,6 +16,7 @@ public abstract class ColoringLexerAdaptor extends Lexer {
     private boolean insideStyleTag = false;
     private boolean attrQuoteOpened = false;
     private boolean varInterpolationOpened = false;
+    private String scriptLanguage = "";
 
     public ColoringLexerAdaptor(CharStream input) {
         super(input);
@@ -57,5 +58,9 @@ public abstract class ColoringLexerAdaptor extends Lexer {
 
     public boolean isVarInterpolationOpened() {
         return varInterpolationOpened;
+    }
+    
+    public String getScriptLanguage() {
+        return scriptLanguage;
     }
 }
